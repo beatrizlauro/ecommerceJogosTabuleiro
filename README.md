@@ -37,7 +37,7 @@ Este é um projeto acadêmico desenvolvido para a disciplina **Programação II*
 
 ### 2. Clone ou baixe este repositório:
 ```bash
-git clone https://github.com/seu-usuario/d20-emporium.git
+git clone https://github.com/beatrizlauro/ecommerceJogosTabuleiro.git
 ```
 
 ### 3. Coloque os arquivos na pasta:
@@ -75,7 +75,7 @@ CREATE TABLE produtos (
     descricao TEXT NOT NULL,
     preco DECIMAL(10,2) NOT NULL,
     estoque INT NOT NULL,
-    imagem VARCHAR(255)
+    imagem LONGBLOB
 );
 ```
 
@@ -84,35 +84,14 @@ CREATE TABLE produtos (
 ## 📂 Estrutura de Pastas (resumo)
 
 ```
-d20-emporium/
-├── conecta.php
-├── index.php
-├── topo.php
-├── rodape.php
-├── lista_usuarios.php
-├── formusuario.php
-├── salvar.php
-├── excluir_usuario.php
-├── lista_produtos.php
-├── formproduto.php
-├── salvar_produto.php
-├── excluir_produto.php
-├── css/
-│   └── estilo.css
-├── js/
-│   └── bootstrap.min.js
+
 ```
 
 ---
 
 ## 📌 Observações
 
-- As senhas dos usuários são salvas com `password_hash()` por segurança.
-- O projeto ainda pode ser expandido com:
-  - Carrinho de compras
-  - Login com sessões
-  - Dashboard de administração
-  - Filtros e pesquisa
+
 
 ---
 
@@ -120,9 +99,8 @@ d20-emporium/
 
 Projeto desenvolvido por:
 
+- Ana Flávia Alves Rosa
 - Beatriz da Costa Lauro  
 - Brenda Bonaita de Oliveira  
-- José Rodrigues de França  
-- Julia Alves de Brito  
 
-Como parte da disciplina de **Inteligência Artificial** – Curso de **Sistemas de Informação**, 5º período – 2025.
+Como parte da disciplina de **Programação II** – Curso de **Sistemas de Informação**, 5º período – 2025.
