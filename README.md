@@ -1,39 +1,53 @@
-# 🧙‍♂️ D20 Emporium - E-commerce de Jogos de Tabuleiro
+# D20 Emporium - E-commerce de Jogos de Tabuleiro
 
-Este é um projeto acadêmico desenvolvido para a disciplina **Programação II**, com o objetivo de aplicar conceitos de programação web, banco de dados e desenvolvimento de sistemas em PHP.
+## Visão Geral
+Projeto desenvolvido como parte da disciplina de Programação II. O sistema é um e-commerce básico focado na venda de jogos de tabuleiro. O objetivo é aplicar os conceitos de desenvolvimento web com PHP e MySQL.
 
----
+## Funcionalidades Implementadas
+✔️ Cadastro e login de usuários com senha protegida por hash  
+✔️ CRUD completo de usuários (cadastrar, listar, editar, excluir)  
+✔️ CRUD completo de produtos (cadastrar, listar, editar, excluir)  
+✔️ Validação de entrada de dados  
+✔️ Sessões para controle de acesso  
+✔️ Design com Bootstrap  
 
-## 💻 Tecnologias Utilizadas
+## Tecnologias Utilizadas
+- PHP (versão 7+)
+- MySQL / MariaDB
+- HTML5 / CSS3
+- Bootstrap 4
+- XAMPP (ambiente local)
 
-- **PHP** (versão 7+)
-- **MySQL** (via phpMyAdmin)
-- **Bootstrap 4/5** (layout responsivo)
-- HTML5 + CSS3
-
----
-
-## 🧩 Funcionalidades
-
-### 👥 Usuários
-- Cadastro de novos usuários
-- Edição de usuários existentes
-- Exclusão de usuários
-- Login (em desenvolvimento)
-
-### 🎲 Produtos
-- Cadastro de produtos
-- Edição de produtos
-- Exclusão de produtos
-- Listagem com nome, preço, estoque e imagem
-
----
+## Estrutura do Projeto
+```
+/d20Emporium/
+├── conecta.php
+├── login.php
+├── logout.php
+├── verificalogin.php
+├── index.php
+├── formusuario.php
+├── salvar_usuario.php
+├── lista_usuarios.php
+├── formProduto.php
+├── salvar_produto.php
+├── lista_produtos.php
+├── errosessao.php
+├── errologin.php
+├── estruturaBD.txt
+├── excluir_produto.php
+├── excluir_usuario.php
+├── rodape.php
+├── topo.php
+├── README.md
+├── css/
+└── js/
+```
 
 ## ⚙️ Como Executar Localmente
 
 ### 1. Instale um servidor local:
 - [XAMPP](https://www.apachefriends.org/index.html)
-- ou [WampServer](https://www.wampserver.com/)
 
 ### 2. Clone ou baixe este repositório:
 ```bash
@@ -79,28 +93,17 @@ CREATE TABLE produtos (
 );
 ```
 
----
+## Acesso ao Sistema
+1. Acesse `http://localhost/d20Emporium/login.php`
+2. Faça login com um usuário cadastrado
+3. Navegue pelo sistema (painel de administração, cadastro de usuários e produtos)
 
-## 📂 Estrutura de Pastas (resumo)
-
-```
-
-```
-
----
-
-## 📌 Observações
-
-
-
----
-
-## 👥 Créditos
-
-Projeto desenvolvido por:
-
+## Desenvolvido por
 - Ana Flávia Alves Rosa
 - Beatriz da Costa Lauro  
 - Brenda Bonaita de Oliveira  
 
-Como parte da disciplina de **Programação II** – Curso de **Sistemas de Informação**, 5º período – 2025.
+Universidade do Estado de Minas Gerais – Sistemas de Informação, 5º período - Programação II  – 2025.
+
+---
+**D20 Emporium**
