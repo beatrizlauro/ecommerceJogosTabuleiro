@@ -1,4 +1,12 @@
 <?php
+session_start();
+if (!isset($_SESSION["idusuario"])) {
+    header("Location: login.php");
+    exit();
+}
+?>
+
+<?php
     if(!isset($_GET["id"])){ // Novo usuário
         $idusuario = 0;
         $nome = "";

@@ -1,4 +1,12 @@
 <?php
+session_start();
+if (!isset($_SESSION["idusuario"])) {
+    header("Location: login.php");
+    exit();
+}
+?>
+
+<?php
     include_once("conecta.php");
     $produtos = listarProdutos();
     include_once("topo.php");

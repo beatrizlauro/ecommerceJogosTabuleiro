@@ -18,7 +18,7 @@ if (isset($_POST["txtLogin"]) && isset($_POST["txtSenha"])) {
         if (password_verify($senha, $usuario["senha"])) {
             $_SESSION["login"] = $usuario["nome"];
             $_SESSION["idusuario"] = $usuario["id"];
-            header("Location: inicio.php");
+            header("Location: index.php");
             exit();
         } else {
             header("Location: errologin.php");
