@@ -76,6 +76,7 @@ if (!isset($_SESSION["idusuario"])) {
             <div class="text-center">
                 <input type="submit" class="btn btn-primary" value="Salvar" onclick="alert('Produto salvo com sucesso!');">
                 <a href="lista_produtos.php" class="btn btn-warning">Cancelar</a>
+                <a href="index.php" class="btn btn-secondary">Voltar</a>
             </div>
         </form>
     </div>

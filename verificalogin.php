@@ -18,6 +18,7 @@ if (isset($_POST["txtLogin"]) && isset($_POST["txtSenha"])) {
         if (password_verify($senha, $usuario["senha"])) {
             $_SESSION["login"] = $usuario["nome"];
             $_SESSION["idusuario"] = $usuario["id"];
+            $_SESSION["is_admin"] = $usuario["is_admin"]; 
             header("Location: index.php");
             exit();
         } else {
