@@ -16,6 +16,7 @@ if (!isset($_SESSION["idusuario"])) {
     <div class="text-center">
         <h3>Lista de Produtos</h3>
         <a href="formproduto.php" class="btn btn-success mb-3">Novo Produto</a>
+        <a href="index.php" class="btn btn-secondary mb-3">Voltar</a>
     </div>
 
     <table class="table table-bordered table-hover">

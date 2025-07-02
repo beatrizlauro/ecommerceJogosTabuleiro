@@ -28,6 +28,7 @@
                             </div>
                             <div class="text-center mt-4">
                                 <input type="submit" name="btnEntrar" value="Entrar" class="btn btn-primary">
+                                <a href="index.php" class="btn btn-secondary ms-2">Voltar</a>
                             </div>
                         </form>
                     </div>
