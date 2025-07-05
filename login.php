@@ -19,8 +19,8 @@
                     <div class="card-body">
                         <form action="verificalogin.php" method="POST">
                             <div class="form-group">
-                                <label for="txtLogin">Usuário (e-mail):</label>
-                                <input type="email" name="txtLogin" id="txtLogin" class="form-control" required>
+                                <label for="txtLogin">Usuário:</label>
+                                <input type="text" name="txtLogin" id="txtLogin" class="form-control" required>
                             </div>
                             <div class="form-group mt-3">
                                 <label for="txtSenha">Senha:</label>

@@ -5,6 +5,7 @@ include_once("conecta.php");
 // Verifica se é um visitante ou um admin
 $acesso_admin = isset($_SESSION["idusuario"]) && isset($_SESSION["is_admin"]) && $_SESSION["is_admin"] == 1;
 
+
 // Se o usuário estiver logado, mas **não for admin**, bloquear acesso
 if (isset($_SESSION["idusuario"]) && !$acesso_admin) {
     header("Location: errosessao.php"); // ou outra página de erro
@@ -49,6 +50,13 @@ include_once("topo.php");
                 <label class="col-sm-2 col-form-label text-right" for="cNome">Nome</label>
                 <div class="col-sm-8">
                     <input type="text" name="txtNome" class="form-control" id="cNome" required value="<?= $nome ?>">
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label text-right" for="cLogin">Login</label>
+                <div class="col-sm-8">
+                    <input type="text" name="txtLogin" class="form-control" id="cLogin" required value="<?= isset($usuario["login"]) ? $usuario["login"] : "" ?>">
                 </div>
             </div>
 

@@ -36,42 +36,25 @@ if (!isset($_SESSION["idusuario"])) {
     </div>
     <div class="painel">
         <form action="salvar_produto.php" method="POST" enctype="multipart/form-data">
-            <input type="hidden" name="id" value="<?php echo($idproduto); ?>">
+            <input type="hidden" name="id" value="0">
 
-            <div class="form-group row">
-                <label class="col-sm-2 col-form-label text-right" for="pNome">Nome</label>
-                <div class="col-sm-8">
-                    <input type="text" name="txtNome" class="form-control" id="pNome" required value="<?php echo($nome); ?>">
-                </div>
-            </div>
+            <label>Nome:</label>
+            <input type="text" name="txtNome" required><br>
 
-            <div class="form-group row">
-                <label class="col-sm-2 col-form-label text-right" for="pDescricao">Descrição</label>
-                <div class="col-sm-8">
-                    <textarea name="txtDescricao" class="form-control" id="pDescricao" rows="4" required><?php echo($descricao); ?></textarea>
-                </div>
-            </div>
+            <label>Descrição:</label>
+            <textarea name="txtDescricao" required></textarea><br>
 
-            <div class="form-group row">
-                <label class="col-sm-2 col-form-label text-right" for="pPreco">Preço</label>
-                <div class="col-sm-4">
-                    <input type="number" name="txtPreco" class="form-control" id="pPreco" step="0.01" required value="<?php echo($preco); ?>">
-                </div>
-            </div>
+            <label>Preço:</label>
+            <input type="number" name="txtPreco" step="0.01" required><br>
 
-            <div class="form-group row">
-                <label class="col-sm-2 col-form-label text-right" for="pEstoque">Estoque</label>
-                <div class="col-sm-4">
-                    <input type="number" name="txtEstoque" class="form-control" id="pEstoque" required value="<?php echo($estoque); ?>">
-                </div>
-            </div>
+            <label>Estoque:</label>
+            <input type="number" name="txtEstoque" required><br>
 
-            <div class="form-group row">
-                <label class="col-sm-2 col-form-label text-right" for="pImagem">Imagem</label>
-                <div class="col-sm-8">
-                    <input type="file" name="imagem" class="form-control" id="pImagem" accept="image/*">
-                </div>
-            </div>
+            <label>Imagem principal:</label>
+            <input type="file" name="imagem" required><br><br>
+
+            <label>Imagens adicionais:</label>
+            <input type="file" name="imagens[]" multiple><br><br>
 
             <div class="text-center">
                 <input type="submit" class="btn btn-primary" value="Salvar" onclick="alert('Produto salvo com sucesso!');">

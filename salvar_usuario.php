@@ -1,20 +1,26 @@
 <?php
 session_start();
-include_once("conecta.php");
+include_once("conecta.php"); // já define $conn globalmente
 
-// Captura os dados do POST
-$idusuario = isset($_POST["id"]) ? (int)$_POST["id"] : 0;
-$nome = $_POST["txtNome"] ?? '';
-$email = $_POST["txtEmail"] ?? '';
-$senha = $_POST["txtSenha"] ?? '';
+$nome = $_POST["txtNome"];
+$login = $_POST["txtLogin"];
+$email = $_POST["txtEmail"];
+$senha = $_POST["txtSenha"];
+$is_admin = isset($_POST["is_admin"]) ? 1 : 0;
 
-// Verifica se o usuário logado é admin
-$usuario_logado_e_admin = isset($_SESSION["idusuario"]) && isset($_SESSION["is_admin"]) && $_SESSION["is_admin"] == 1;
+// Criptografa a senha (boa prática)
+$senha_hash = password_hash($senha, PASSWORD_DEFAULT);
 
-// Se for edição (id > 0) e não for admin, bloqueia acesso
-if ($idusuario > 0 && !$usuario_logado_e_admin) {
-    header("Location: errosessao.php");
+// Usa diretamente a variável $conn que já foi criada em conecta.php
+$stmt = $conn->prepare("INSERT INTO usuarios (nome, login, email, senha, is_admin) VALUES (?, ?, ?, ?, ?)");
+$stmt->bind_param("ssssi", $nome, $login, $email, $senha_hash, $is_admin);
+
+if ($stmt->execute()) {
+    // Cadastro com sucesso
+    header("Location: login.php");
     exit();
+} else {
+    echo "Erro ao cadastrar usuário: " . $stmt->error;
 }
 
 // Valida campos obrigatórios

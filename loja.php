@@ -4,35 +4,21 @@ include_once("conecta.php");
 include("topo.php");
 
 $produtos = listarProdutos();
-$destaques = array_slice($produtos, 0, 4);
 ?>
 
-<section class="hero-section">
-  <div class="hero-content">
-    <h1>Bem-vindo à D20 Emporium</h1>
-    <p>Descubra os jogos de tabuleiro mais épicos para desafiar sua mente!</p>
-    <?php if (!isset($_SESSION["idusuario"])): ?>
-      <a href="login.php" class="btn-hero">Entrar</a>
-      <a href="formUsuario.php" class="btn-hero" style="background-color: transparent; border: 2px solid white; margin-left: 15px;">Criar Conta</a>
-    <?php else: ?>
-      <a href="loja.php" class="btn-hero">Ver Loja Completa</a>
-    <?php endif; ?>
-  </div>
-</section>
-
 <div class="container mt-5">
-  <h2 class="section-title">Destaques</h2>
+  <h2 class="section-title">Todos os Produtos</h2>
   <div class="product-grid">
-    <?php foreach ($destaques as $produto): ?>
+    <?php foreach ($produtos as $produto): ?>
       <div class="product-card">
         <div id="carousel<?= $produto['id'] ?>" class="carousel slide" data-bs-ride="carousel">
           <div class="carousel-inner">
             <?php
-              $imagens = listarImagensProduto($produto['id']);
-              foreach ($imagens as $i => $img): ?>
-                <div class="carousel-item <?= $i == 0 ? 'active' : '' ?>">
-                  <img src="exibir_img.php?id=<?= $img['id'] ?>" class="d-block w-100 product-img" alt="Imagem do Produto">
-                </div>
+            $imagens = listarImagensProduto($produto['id']);
+            foreach ($imagens as $i => $img): ?>
+              <div class="carousel-item <?= $i == 0 ? 'active' : '' ?>">
+                <img src="exibir_img.php?id=<?= $img['id'] ?>" class="d-block w-100 product-img" alt="Imagem do Produto">
+              </div>
             <?php endforeach; ?>
           </div>
           <button class="carousel-control-prev" type="button" data-bs-target="#carousel<?= $produto['id'] ?>" data-bs-slide="prev">
@@ -56,9 +42,9 @@ $destaques = array_slice($produtos, 0, 4);
       </div>
     <?php endforeach; ?>
   </div>
-  <div class="text-center mt-4">
-    <a href="loja.php" class="btn-outline">Ver Todos os Produtos</a>
-  </div>
 </div>
 
 <?php include("rodape.php"); ?>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+

@@ -34,3 +34,32 @@ CREATE TABLE itens_pedido (
     FOREIGN KEY (pedido_id) REFERENCES pedidos(id),
     FOREIGN KEY (produto_id) REFERENCES produtos(id)
 );
+
+CREATE TABLE pedidos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    data_pedido DATETIME,
+    total DECIMAL(10,2),
+    forma_pagamento VARCHAR(50),
+    cep VARCHAR(20),
+    rua VARCHAR(100),
+    numero VARCHAR(10),
+    cidade VARCHAR(50),
+    estado VARCHAR(2)
+);
+
+CREATE TABLE itens_pedido (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_pedido INT,
+    id_produto INT,
+    nome_produto VARCHAR(100),
+    preco DECIMAL(10,2),
+    quantidade INT,
+    FOREIGN KEY (id_pedido) REFERENCES pedidos(id)
+);
+
+CREATE TABLE imagens_produto (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_produto INT NOT NULL,
+    imagem LONGBLOB NOT NULL,
+    FOREIGN KEY (id_produto) REFERENCES produtos(id) ON DELETE CASCADE
+);

@@ -5,18 +5,23 @@
     define("BANCO", "d20_emporium");
 
     // Conecta ao banco
-    function abreConexao() {
-        $con = new mysqli(SERVIDOR, USUARIO, SENHA, BANCO);
-        if ($con->connect_error) {
-            die("Erro de conexão: " . $con->connect_error);
-        }
-        return $con;
+    $conn = new mysqli("localhost", "root", "", "d20_emporium");
+    if ($conn->connect_error) {
+        die("Erro de conexão: " . $conn->connect_error);
     }
+    
+    function listarImagensProduto($produto_id) {
+    global $conn;
+    $stmt = $conn->prepare("SELECT id FROM imagens_produto WHERE id_produto = ?");
+    $stmt->bind_param("i", $produto_id);
+    $stmt->execute();
+    return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+}
 
 // USUÁRIOS
 
     function cadastrarUsuario($nome, $email, $senha) {
-        $con = abreConexao();
+        global $conn;
         $senhaHash = password_hash($senha, PASSWORD_DEFAULT); // segurança
         $sql = "INSERT INTO usuarios (nome, email, senha) VALUES (?, ?, ?)";
         $stmt = $con->prepare($sql);
@@ -27,7 +32,7 @@
     }
 
     function loginUsuario($email, $senha) {
-        $con = abreConexao();
+        global $conn;
         $sql = "SELECT * FROM usuarios WHERE email = ?";
         $stmt = $con->prepare($sql);
         $stmt->bind_param("s", $email);
@@ -45,7 +50,7 @@
     }
 
     function editarUsuario($id, $nome, $email, $senha = null) {
-        $con = abreConexao();
+        global $conn;
 
         if ($senha) {
             $senhaHash = password_hash($senha, PASSWORD_DEFAULT);
@@ -64,7 +69,7 @@
     }
 
     function excluirUsuario($id) {
-        $con = abreConexao();
+        global $conn;
         $sql = "DELETE FROM usuarios WHERE id = ?";
         $stmt = $con->prepare($sql);
         $stmt->bind_param("i", $id);
@@ -74,7 +79,7 @@
     }
 
     function listarUsuarios() {
-        $con = abreConexao();
+       global $conn;
         $sql = "SELECT id, nome, email FROM usuarios";
         $resultado = $con->query($sql);
         $usuarios = [];
@@ -105,34 +110,34 @@
 // PRODUTOS
 
     function cadastrarProduto($nome, $descricao, $preco, $estoque, $imagem) {
-        $con = abreConexao();
-        $sql = "INSERT INTO produtos (nome, descricao, preco, estoque, imagem) VALUES (?, ?, ?, ?, ?)";
-        $stmt = $con->prepare($sql);
-        $null = NULL;
-        $stmt->bind_param("ssdib", $nome, $descricao, $preco, $estoque, $null);
-        $stmt->send_long_data(4, $imagem);
-        $stmt->execute();
-        $stmt->close();
-        $con->close();
-    }
+    global $conn; // ou passe $conn como parâmetro se preferir
+
+    $stmt = $conn->prepare("INSERT INTO produtos (nome, descricao, preco, estoque, imagem) VALUES (?, ?, ?, ?, ?)");
+    $stmt->bind_param("ssdib", $nome, $descricao, $preco, $estoque, $imagem);
+    $stmt->send_long_data(4, $imagem);
+    $stmt->execute();
+
+    return $conn->insert_id; // <- Retorna o ID do novo produto
+}
 
     function listarProdutos() {
-        $con = abreConexao();
-        $sql = "SELECT * FROM produtos ORDER BY nome";
-        $resultado = $con->query($sql);
-        $produtos = [];
+    global $conn;
+    $produtos = [];
 
-        if ($resultado->num_rows > 0) {
-            while ($row = $resultado->fetch_assoc()) {
-                $produtos[] = $row;
-            }
+    $sql = "SELECT * FROM produtos";
+    $result = $conn->query($sql);
+
+    if ($result && $result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $produtos[] = $row;
         }
-        $con->close();
-        return $produtos;
     }
 
+    return $produtos;
+}
+
     function editarProduto($id, $nome, $descricao, $preco, $estoque, $imagem = null) {
-        $con = abreConexao();
+        global $conn;
 
         if ($imagem !== null) {
             $sql = "UPDATE produtos SET nome = ?, descricao = ?, preco = ?, estoque = ?, imagem = ? WHERE id = ?";
@@ -156,7 +161,7 @@
     }
 
     function excluirProduto($id) {
-        $con = abreConexao();
+        global $conn;
         $sql = "DELETE FROM produtos WHERE id = ?";
         $stmt = $con->prepare($sql);
         $stmt->bind_param("i", $id);
@@ -165,16 +170,31 @@
         $con->close();
     }
 
-    function obterProdutoPorId($id) {
-        $con = abreConexao();
-        $sql = "SELECT * FROM produtos WHERE id = ?";
-        $stmt = $con->prepare($sql);
-        $stmt->bind_param("i", $id);
+   function obterProdutoPorId(int $id): ?array {
+    global $conn;
+    $stmt = $conn->prepare("SELECT id, nome, descricao, preco, imagem FROM produtos WHERE id = ?");
+    $stmt->bind_param('i', $id);
+    $stmt->execute();
+    $resultado = $stmt->get_result();
+    return $resultado->fetch_assoc() ?: null;
+}
+
+
+    function editarProdutoSemImagem($id, $nome, $descricao, $preco, $estoque) {
+        global $conn;
+        $sql = "UPDATE produtos SET nome=?, descricao=?, preco=?, estoque=? WHERE id=?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ssdii", $nome, $descricao, $preco, $estoque, $id);
         $stmt->execute();
-        $resultado = $stmt->get_result();
-        $produto = $resultado->fetch_assoc();
-        $stmt->close();
-        $con->close();
-        return $produto;
-    }
+}
+    $servername = "localhost";
+    $username = "root";
+    $password = "";
+    $dbname = "d20_emporium";
+
+    $conn = new mysqli($servername, $username, $password, $dbname);
+    if ($conn->connect_error) {
+        die("Erro na conexão: " . $conn->connect_error);
+}
+
 ?>

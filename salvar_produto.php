@@ -1,34 +1,46 @@
 <?php
+echo "<pre>";
+print_r($_FILES['imagens']);
+echo "</pre>";
 session_start();
 if (!isset($_SESSION["idusuario"])) {
     header("Location: login.php");
     exit();
 }
-?>
 
-<?php
-    include_once("conecta.php");
+include_once("conecta.php");
 
-    // Dados do formulário
-    $id = $_POST["id"];
-    $nome = $_POST["txtNome"];
-    $descricao = $_POST["txtDescricao"];
-    $preco = $_POST["txtPreco"];
-    $estoque = $_POST["txtEstoque"];
+// Dados do formulário
+$nome = $_POST["txtNome"];
+$descricao = $_POST["txtDescricao"];
+$preco = floatval($_POST["txtPreco"]);
+$estoque = intval($_POST["txtEstoque"]);
 
-    $imagem = null;
-    if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] === 0) {
-        $imagem = file_get_contents($_FILES['imagem']['tmp_name']);
+// Imagem principal
+if (isset($_FILES["imagem"]) && $_FILES["imagem"]["error"] == 0) {
+    $imagemTempPath = $_FILES["imagem"]["tmp_name"];
+    $imagemBinario = file_get_contents($imagemTempPath);
+
+    // Cadastra produto e obtém o ID
+    $idProduto = cadastrarProduto($nome, $descricao, $preco, $estoque, $imagemBinario);
+
+    // Agora salva as imagens adicionais
+    if (!empty($_FILES['imagens']['tmp_name'][0])) {
+        foreach ($_FILES['imagens']['tmp_name'] as $index => $tmpName) {
+            if ($_FILES['imagens']['error'][$index] === 0) {
+                $imagem = file_get_contents($tmpName);
+
+                $stmt = $conn->prepare("INSERT INTO imagens_produto (id_produto, imagem) VALUES (?, ?)");
+                $stmt->bind_param("ib", $idProduto, $imagem);
+                $stmt->send_long_data(1, $imagem);
+                $stmt->execute();
+            }
+        }
     }
 
-    // Salvar no banco
-    if ($id == 0) {
-        cadastrarProduto($nome, $descricao, $preco, $estoque, $imagem);
-    } else {
-        editarProduto($id, $nome, $descricao, $preco, $estoque, $imagem);
-    }
-
-    // Redirecionar
+    // Redireciona ao final
     header("Location: lista_produtos.php");
     exit();
-?>
+} else {
+    echo "Nenhuma imagem principal foi enviada.";
+}
