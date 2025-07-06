@@ -17,7 +17,7 @@ $stmt->bind_param("ssssi", $nome, $login, $email, $senha_hash, $is_admin);
 
 if ($stmt->execute()) {
     // Cadastro com sucesso
-    header("Location: login.php");
+    header("Location: index.php");
     exit();
 } else {
     echo "Erro ao cadastrar usuário: " . $stmt->error;

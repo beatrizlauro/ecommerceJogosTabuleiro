@@ -14,7 +14,7 @@ if (!isset($_SESSION["idusuario"])) {
 
 <div class="container">
     <div class="text-center">
-        <h3>Lista de Usuários</h3>
+        <h3 style="color: white;">Lista de Usuários</h3>
         <a href="formusuario.php" class="btn btn-success mb-3">Novo Usuário</a>
         <a href="index.php" class="btn btn-secondary mb-3">Voltar</a>
     </div>

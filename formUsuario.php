@@ -40,7 +40,7 @@ include_once("topo.php");
 
 <div class="container">
     <div class="text-center">
-        <h3><?= $idusuario == 0 ? "Criar Conta" : "Cadastro de Usuário" ?></h3>
+        <h3 style="color: white;"><?= $idusuario == 0 ? "Criar Conta" : "Cadastro de Usuário" ?></h3>
     </div>
     <div class="painel">
         <form action="salvar_usuario.php" method="POST">

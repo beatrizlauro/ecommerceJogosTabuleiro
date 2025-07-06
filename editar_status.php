@@ -26,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["novo_status"])) {
 }
 
 // Buscar dados do pedido
-$sql = "SELECT p.id, u.nome AS usuario, p.status, p.data
+$sql = "SELECT p.id, u.nome AS usuario, p.status, p.data_pedido
         FROM pedidos p
         JOIN usuarios u ON p.usuario_id = u.id
         WHERE p.id = ?";
@@ -42,7 +42,7 @@ include "topo.php";
 <div class="container">
     <h3>Editar Status do Pedido #<?= $pedido["id"] ?></h3>
     <p><strong>Usuário:</strong> <?= $pedido["usuario"] ?></p>
-    <p><strong>Data:</strong> <?= $pedido["data"] ?></p>
+    <p><strong>Data:</strong> <?= $pedido["data_pedido"] ?></p>
 
     <?php if ($mensagem): ?>
         <div class="alert alert-success"><?= $mensagem ?></div>

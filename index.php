@@ -27,12 +27,18 @@ $destaques = array_slice($produtos, 0, 4);
       <div class="product-card">
         <div id="carousel<?= $produto['id'] ?>" class="carousel slide" data-bs-ride="carousel">
           <div class="carousel-inner">
+            <?php if (!empty($produto['imagem'])): ?>
+              <div class="carousel-item active">
+                <img src="exibir_img_principal.php?id=<?= $produto['id'] ?>" class="d-block w-100 product-img" alt="Imagem Principal" style="height: 250px; object-fit: contain; background-color: #fff;">
+              </div>
+            <?php endif; ?>
+
             <?php
-              $imagens = listarImagensProduto($produto['id']);
-              foreach ($imagens as $i => $img): ?>
-                <div class="carousel-item <?= $i == 0 ? 'active' : '' ?>">
-                  <img src="exibir_img.php?id=<?= $img['id'] ?>" class="d-block w-100 product-img" alt="Imagem do Produto">
-                </div>
+            $imagens = listarImagensProduto($produto['id']);
+            foreach ($imagens as $img): ?>
+              <div class="carousel-item">
+                <img src="exibir_img.php?id=<?= $img['id'] ?>" class="d-block w-100 product-img" alt="Imagem Adicional" style="height: 250px; object-fit: contain; background-color: #fff;">
+              </div>
             <?php endforeach; ?>
           </div>
           <button class="carousel-control-prev" type="button" data-bs-target="#carousel<?= $produto['id'] ?>" data-bs-slide="prev">
@@ -56,9 +62,12 @@ $destaques = array_slice($produtos, 0, 4);
       </div>
     <?php endforeach; ?>
   </div>
+
   <div class="text-center mt-4">
     <a href="loja.php" class="btn-outline">Ver Todos os Produtos</a>
   </div>
 </div>
 
 <?php include("rodape.php"); ?>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

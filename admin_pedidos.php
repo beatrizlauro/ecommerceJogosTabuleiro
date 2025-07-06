@@ -9,10 +9,10 @@ include "conecta.php";
 $con = abreConexao();
 
 // Consulta: pedidos + nomes de usuários
-$sql = "SELECT p.id AS pedido_id, u.nome AS usuario, p.data, p.status 
+$sql = "SELECT p.id AS pedido_id, u.nome AS usuario, p.data_pedido, p.status 
         FROM pedidos p 
         JOIN usuarios u ON p.usuario_id = u.id 
-        ORDER BY p.data DESC";
+        ORDER BY p.data_pedido DESC";
 
 $resultado = $con->query($sql);
 
@@ -20,7 +20,7 @@ include "topo.php";
 ?>
 
 <div class="container">
-    <h3>Pedidos Realizados</h3>
+    <h3 style="color: white;">Pedidos Realizados</h3>
     <a href="index.php" class="btn btn-secondary mb-3">Voltar</a>
     <table class="table table-bordered">
         <thead>
@@ -37,7 +37,7 @@ include "topo.php";
                 <tr>
                     <td><?= $row["pedido_id"] ?></td>
                     <td><?= $row["usuario"] ?></td>
-                    <td><?= $row["data"] ?></td>
+                    <td><?= $row["data_pedido"] ?></td>
                     <td>
                         <a href="detalhes_pedido.php?id=<?= $row["pedido_id"] ?>" class="btn btn-info btn-sm">Ver Detalhes</a>
                         <a href="editar_status.php?id=<?= $row["pedido_id"] ?>" class="btn btn-warning btn-sm mt-1">Alterar Status</a>

@@ -14,10 +14,20 @@ $produtos = listarProdutos();
         <div id="carousel<?= $produto['id'] ?>" class="carousel slide" data-bs-ride="carousel">
           <div class="carousel-inner">
             <?php
+            // Adiciona a imagem principal como primeiro item do carrossel
+            if (!empty($produto['imagem'])):
+            ?>
+              <div class="carousel-item active">
+                <img src="exibir_img_principal.php?id=<?= $produto['id'] ?>" class="d-block w-100 product-img" alt="Imagem Principal" style="height: 250px; object-fit: contain; background-color: #fff;">
+              </div>
+            <?php
+            endif;
+
+            // Adiciona imagens adicionais da tabela imagens_produto
             $imagens = listarImagensProduto($produto['id']);
-            foreach ($imagens as $i => $img): ?>
-              <div class="carousel-item <?= $i == 0 ? 'active' : '' ?>">
-                <img src="exibir_img.php?id=<?= $img['id'] ?>" class="d-block w-100 product-img" alt="Imagem do Produto">
+            foreach ($imagens as $img): ?>
+              <div class="carousel-item">
+                <img src="exibir_img.php?id=<?= $img['id'] ?>" class="d-block w-100 product-img" alt="Imagem Adicional" style="height: 250px; object-fit: contain; background-color: #fff;">
               </div>
             <?php endforeach; ?>
           </div>
@@ -47,4 +57,3 @@ $produtos = listarProdutos();
 <?php include("rodape.php"); ?>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-

@@ -18,7 +18,7 @@ if ($pedido_id <= 0) {
 }
 
 // Consulta o pedido e o usuário
-$sql = "SELECT p.id, p.data, p.status, u.nome AS usuario 
+$sql = "SELECT p.id, p.data_pedido, p.status, u.nome AS usuario 
         FROM pedidos p
         JOIN usuarios u ON p.usuario_id = u.id
         WHERE p.id = ?";
@@ -36,8 +36,8 @@ if (!$pedido) {
 // Consulta os itens do pedido
 $sql_itens = "SELECT pr.nome, pr.preco, i.quantidade
               FROM itens_pedido i
-              JOIN produtos pr ON i.produto_id = pr.id
-              WHERE i.pedido_id = ?";
+              JOIN produtos pr ON i.id_produto = pr.id
+              WHERE i.id_pedido = ?";
 $stmt = $con->prepare($sql_itens);
 $stmt->bind_param("i", $pedido_id);
 $stmt->execute();
@@ -49,7 +49,7 @@ include "topo.php";
 <div class="container">
     <h3>Detalhes do Pedido #<?= $pedido["id"] ?></h3>
     <p><strong>Usuário:</strong> <?= $pedido["usuario"] ?></p>
-    <p><strong>Data:</strong> <?= $pedido["data"] ?></p>
+    <p><strong>Data:</strong> <?= $pedido["data_pedido"] ?></p>
     <p><strong>Status:</strong>
         <span class="badge 
             <?php

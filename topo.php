@@ -38,6 +38,18 @@ if (isset($_SESSION['carrinho'])) {
                     <li class="nav-item"><a class="nav-link text-white" href="login.php">Login</a></li>
                     <li class="nav-item"><a class="nav-link text-white" href="formUsuario.php">Criar Conta</a></li>
                 <?php else: ?>
+                    <?php if (isset($_SESSION["is_admin"]) && $_SESSION["is_admin"] == 1): ?>
+                        <!-- Menu do administrador -->
+                        <li class="nav-item"><a class="nav-link text-white" href="lista_produtos.php">Produtos</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" href="formProduto.php">Cadastrar Produto</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" href="admin_pedidos.php">Pedidos</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" href="lista_usuarios.php">Usuários</a></li>
+                        <?php else: ?>
+                            <!-- Menu do cliente -->
+                            <li class="nav-item"><a class="nav-link text-white" href="meus_pedidos.php">📦 Meus Pedidos</a></li>
+                        <?php endif; ?>
+                                            
+                    <!-- Link comum a todos logados -->
                     <li class="nav-item"><a class="nav-link text-white" href="logout.php">Sair</a></li>
                 <?php endif; ?>
             </ul>

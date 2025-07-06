@@ -64,7 +64,7 @@ function buscarProdutoPorId($id) {
     <h2 class="mb-4">Carrinho de Compras</h2>
 
     <?php if (empty($_SESSION['carrinho'])): ?>
-        <p>Seu carrinho está vazio.</p>
+        <p style="color: white;">Seu carrinho está vazio.</p>
         <a href="loja.php" class="btn btn-outline-primary">Voltar à loja</a>
     <?php else: ?>
         <?php
@@ -134,6 +134,8 @@ function buscarProdutoPorId($id) {
                 <option value="cartao">Cartão de Crédito</option>
                 <option value="boleto">Boleto Bancário</option>
             </select>
+
+            <input type="hidden" name="confirmar" value="1">
 
             <div class="mt-4 d-flex justify-content-between">
                 <a href="loja.php" class="btn btn-outline-secondary">← Continuar Comprando</a>

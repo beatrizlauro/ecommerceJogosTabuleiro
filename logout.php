@@ -1,14 +1,9 @@
 <?php
-session_unset();  // limpa todas as variáveis da sessão
-session_destroy(); // destrói a sessão
-session_start();
+session_start();       // Inicia a sessão (caso não esteja iniciada)
+session_unset();       // Limpa todas as variáveis da sessão
+session_destroy();     // Destroi a sessão
 
-if (isset($_SESSION["Sair"])) {
-    session_destroy();
-    header("Location: index.php");
-    exit();
-}
-// Redireciona para a página de login
-header("Location: login.php");
+// Redireciona para a página pública (index)
+header("Location: index.php");
 exit();
 ?>

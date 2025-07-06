@@ -9,6 +9,14 @@
     if ($conn->connect_error) {
         die("Erro de conexão: " . $conn->connect_error);
     }
+
+    function abreConexao() {
+        $conn = new mysqli(SERVIDOR, USUARIO, SENHA, BANCO);
+        if ($conn->connect_error) {
+            die("Erro na conexão: " . $conn->connect_error);
+        }
+        return $conn;
+    }
     
     function listarImagensProduto($produto_id) {
     global $conn;
@@ -81,7 +89,7 @@
     function listarUsuarios() {
        global $conn;
         $sql = "SELECT id, nome, email FROM usuarios";
-        $resultado = $con->query($sql);
+        $resultado = $conn->query($sql);
         $usuarios = [];
 
         if ($resultado->num_rows > 0) {
@@ -89,7 +97,7 @@
                 $usuarios[] = $row;
             }
         }
-        $con->close();
+        $conn->close();
         return $usuarios;
     }
 
@@ -163,11 +171,11 @@
     function excluirProduto($id) {
         global $conn;
         $sql = "DELETE FROM produtos WHERE id = ?";
-        $stmt = $con->prepare($sql);
+        $stmt = $conn->prepare($sql);
         $stmt->bind_param("i", $id);
         $stmt->execute();
         $stmt->close();
-        $con->close();
+        $conn->close();
     }
 
    function obterProdutoPorId(int $id): ?array {
