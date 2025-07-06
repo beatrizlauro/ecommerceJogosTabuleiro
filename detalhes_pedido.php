@@ -17,8 +17,8 @@ if ($pedido_id <= 0) {
     exit();
 }
 
-// Consulta o pedido e o usuário
-$sql = "SELECT p.id, p.data_pedido, p.status, u.nome AS usuario 
+// Consulta o pedido, o usuário, o endereço e forma de pagamento
+$sql = "SELECT p.id, p.data_pedido, p.status, p.cep, p.rua, p.numero, p.cidade, p.estado, p.forma_pagamento, u.nome AS usuario 
         FROM pedidos p
         JOIN usuarios u ON p.usuario_id = u.id
         WHERE p.id = ?";
@@ -48,8 +48,15 @@ include "topo.php";
 
 <div class="container">
     <h3 style="color: white;">Detalhes do Pedido #<?= $pedido["id"] ?></h3>
-    <p style="color: white;"><strong>Usuário:</strong> <?= $pedido["usuario"] ?></p>
-    <p style="color: white;"><strong>Data:</strong> <?= $pedido["data_pedido"] ?></p>
+    <p style="color: white;"><strong>Usuário:</strong> <?= htmlspecialchars($pedido["usuario"]) ?></p>
+    <p style="color: white;"><strong>Data:</strong> <?= htmlspecialchars($pedido["data_pedido"]) ?></p>
+    <p style="color: white;">
+        <strong>Endereço:</strong>
+        <?= htmlspecialchars($pedido["rua"]) ?>, <?= htmlspecialchars($pedido["numero"]) ?>,
+        <?= htmlspecialchars($pedido["cidade"]) ?> - <?= htmlspecialchars($pedido["estado"]) ?>,
+        CEP: <?= htmlspecialchars($pedido["cep"]) ?>
+    </p>
+    <p style="color: white;"><strong>Pagamento:</strong> <?= strtoupper($pedido["forma_pagamento"]) ?></p>
     <p style="color: white;"><strong>Status:</strong>
         <span class="badge 
             <?php
@@ -83,7 +90,7 @@ include "topo.php";
                 $total += $subtotal;
             ?>
                 <tr>
-                    <td><?= $item["nome"] ?></td>
+                    <td><?= htmlspecialchars($item["nome"]) ?></td>
                     <td>R$ <?= number_format($item["preco"], 2, ',', '.') ?></td>
                     <td><?= $item["quantidade"] ?></td>
                     <td>R$ <?= number_format($subtotal, 2, ',', '.') ?></td>
