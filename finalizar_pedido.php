@@ -67,6 +67,13 @@ foreach ($_SESSION['carrinho'] as $id_produto => $item) {
     $quantidade = $item['quantidade'];
     $stmt->bind_param("iisdi", $pedido_id, $id_produto, $nome, $preco, $quantidade);
     $stmt->execute();
+
+    // Atualiza o estoque (diminui a quantidade comprada)
+    $sql_estoque = "UPDATE produtos SET estoque = estoque - ? WHERE id = ? AND estoque >= ?";
+    $stmt_estoque = $con->prepare($sql_estoque);
+    $stmt_estoque->bind_param("iii", $quantidade, $id_produto, $quantidade);
+    $stmt_estoque->execute();
+    $stmt_estoque->close();
 }
 $stmt->close();
 

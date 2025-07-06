@@ -53,11 +53,15 @@ $destaques = array_slice($produtos, 0, 4);
           <h5 class="product-title"><?= htmlspecialchars($produto['nome']) ?></h5>
           <p class="product-description"><?= htmlspecialchars($produto['descricao']) ?></p>
           <p class="product-price">R$ <?= number_format($produto['preco'], 2, ',', '.') ?></p>
+          <?php if ($produto['estoque'] > 0): ?>
           <form action="carrinho.php" method="GET">
             <input type="hidden" name="acao" value="adicionar">
             <input type="hidden" name="id" value="<?= $produto['id'] ?>">
             <button type="submit" class="btn-adicionar">Adicionar ao Carrinho</button>
           </form>
+          <?php else: ?>
+            <button class="btn-adicionar btn btn-secondary" disabled>Produto Esgotado</button>
+          <?php endif; ?>
         </div>
       </div>
     <?php endforeach; ?>

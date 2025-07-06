@@ -7,49 +7,78 @@ if (!isset($_SESSION['carrinho'])) {
     $_SESSION['carrinho'] = [];
 }
 
+// Função para buscar produto no banco, incluindo estoque
+function buscarProdutoPorId($id) {
+    global $conn;
+    $stmt = $conn->prepare("SELECT id, nome, preco, estoque FROM produtos WHERE id = ?");
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    return $stmt->get_result()->fetch_assoc();
+}
+
 // Ações do carrinho
 if (isset($_GET['acao'])) {
     $id = $_GET['id'] ?? null;
 
-    if ($_GET['acao'] == 'adicionar' && $id) {
-        if (isset($_SESSION['carrinho'][$id])) {
-            $_SESSION['carrinho'][$id]['quantidade']++;
-        } else {
-            $produto = buscarProdutoPorId($id);
-            if ($produto) {
-                $_SESSION['carrinho'][$id] = [
-                    'nome' => $produto['nome'],
-                    'preco' => $produto['preco'],
-                    'quantidade' => 1,
-                    'imagem' => "exibir_img.php?id=$id"
-                ];
-            }
+    if ($id) {
+        $produtoBD = buscarProdutoPorId($id);
+        if (!$produtoBD) {
+            // Produto não encontrado, apenas redireciona
+            header("Location: carrinho.php");
+            exit;
         }
-    } elseif ($_GET['acao'] == 'remover' && $id) {
-        unset($_SESSION['carrinho'][$id]);
-    } elseif ($_GET['acao'] == 'incrementar' && $id) {
-        $_SESSION['carrinho'][$id]['quantidade']++;
-    } elseif ($_GET['acao'] == 'diminuir' && $id) {
-        if ($_SESSION['carrinho'][$id]['quantidade'] > 1) {
-            $_SESSION['carrinho'][$id]['quantidade']--;
-        } else {
-            unset($_SESSION['carrinho'][$id]);
+
+        $estoque = intval($produtoBD['estoque']);
+
+        switch ($_GET['acao']) {
+            case 'adicionar':
+                $quantidadeAtual = $_SESSION['carrinho'][$id]['quantidade'] ?? 0;
+                if ($quantidadeAtual + 1 <= $estoque) {
+                    if (isset($_SESSION['carrinho'][$id])) {
+                        $_SESSION['carrinho'][$id]['quantidade']++;
+                    } else {
+                        $_SESSION['carrinho'][$id] = [
+                            'nome' => $produtoBD['nome'],
+                            'preco' => $produtoBD['preco'],
+                            'quantidade' => 1,
+                            'imagem' => "exibir_img.php?id=$id"
+                        ];
+                    }
+                }
+                break;
+
+            case 'incrementar':
+                if (!isset($_SESSION['carrinho'][$id])) break;
+
+                $quantidadeAtual = $_SESSION['carrinho'][$id]['quantidade'];
+                if ($quantidadeAtual + 1 <= $estoque) {
+                    $_SESSION['carrinho'][$id]['quantidade']++;
+                }
+                break;
+
+            case 'diminuir':
+                if (isset($_SESSION['carrinho'][$id])) {
+                    if ($_SESSION['carrinho'][$id]['quantidade'] > 1) {
+                        $_SESSION['carrinho'][$id]['quantidade']--;
+                    } else {
+                        unset($_SESSION['carrinho'][$id]);
+                    }
+                }
+                break;
+
+            case 'remover':
+                unset($_SESSION['carrinho'][$id]);
+                break;
         }
     }
-}
 
-function buscarProdutoPorId($id) {
-    global $conn;
-    $stmt = $conn->prepare("SELECT id, nome, preco FROM produtos WHERE id = ?");
-    $stmt->bind_param("i", $id);
-    $stmt->execute();
-    return $stmt->get_result()->fetch_assoc();
+    header("Location: carrinho.php");
+    exit;
 }
 ?>
 
 <!DOCTYPE html>
 <html lang="pt-BR">
-    <main class="mt-5">
 <head>
     <meta charset="UTF-8">
     <title>Carrinho de Compras</title>
@@ -72,6 +101,10 @@ function buscarProdutoPorId($id) {
         foreach ($_SESSION['carrinho'] as $id => $produto):
             $subtotal = $produto['preco'] * $produto['quantidade'];
             $total += $subtotal;
+
+            // Busca estoque atual para controle do botão
+            $produtoBD = buscarProdutoPorId($id);
+            $estoque = intval($produtoBD['estoque']);
         ?>
             <div class="card mb-3">
                 <div class="row g-0 align-items-center">
@@ -84,10 +117,13 @@ function buscarProdutoPorId($id) {
                             <p class="card-text">Preço: R$ <?= number_format($produto['preco'], 2, ',', '.') ?></p>
                             <p class="card-text">Quantidade: <?= $produto['quantidade'] ?></p>
                             <div>
-                                <a href="?acao=incrementar&id=<?= $id ?>" class="btn btn-sm btn-outline-success">+</a>
+                                <a href="?acao=incrementar&id=<?= $id ?>" class="btn btn-sm btn-outline-success <?= ($produto['quantidade'] >= $estoque) ? 'disabled' : '' ?>">+</a>
                                 <a href="?acao=diminuir&id=<?= $id ?>" class="btn btn-sm btn-outline-warning">-</a>
                                 <a href="?acao=remover&id=<?= $id ?>" class="btn btn-sm btn-outline-danger">Remover</a>
                             </div>
+                            <?php if ($produto['quantidade'] >= $estoque): ?>
+                                <small class="text-danger">Estoque máximo atingido</small>
+                            <?php endif; ?>
                         </div>
                     </div>
                     <div class="col-md-3 text-end pe-4">
@@ -147,6 +183,5 @@ function buscarProdutoPorId($id) {
 
 <?php include("rodape.php"); ?>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    </main>
 </body>
 </html>

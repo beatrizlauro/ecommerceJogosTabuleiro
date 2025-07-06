@@ -178,14 +178,14 @@
         $conn->close();
     }
 
-   function obterProdutoPorId(int $id): ?array {
-    global $conn;
-    $stmt = $conn->prepare("SELECT id, nome, descricao, preco, imagem FROM produtos WHERE id = ?");
-    $stmt->bind_param('i', $id);
-    $stmt->execute();
-    $resultado = $stmt->get_result();
-    return $resultado->fetch_assoc() ?: null;
-}
+    function obterProdutoPorId(int $id): ?array {
+        global $conn;
+        $stmt = $conn->prepare("SELECT id, nome, descricao, preco, estoque, imagem FROM produtos WHERE id = ?");
+        $stmt->bind_param('i', $id);
+        $stmt->execute();
+        $resultado = $stmt->get_result();
+        return $resultado->fetch_assoc() ?: null;
+    }
 
 
     function editarProdutoSemImagem($id, $nome, $descricao, $preco, $estoque) {
