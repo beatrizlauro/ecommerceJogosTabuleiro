@@ -41,7 +41,7 @@ if (isset($_GET['acao'])) {
                             'nome' => $produtoBD['nome'],
                             'preco' => $produtoBD['preco'],
                             'quantidade' => 1,
-                            'imagem' => "exibir_img.php?id=$id"
+                            'imagem' => "exibir_img_principal.php?id=$id"
                         ];
                     }
                 }
@@ -106,7 +106,7 @@ if (isset($_GET['acao'])) {
             $produtoBD = buscarProdutoPorId($id);
             $estoque = intval($produtoBD['estoque']);
         ?>
-            <div class="card mb-3">
+            <div class="card mb-3" id="produto<?= $id ?>">
                 <div class="row g-0 align-items-center">
                     <div class="col-md-2">
                         <img src="<?= $produto['imagem'] ?>" class="img-fluid rounded-start" alt="<?= $produto['nome'] ?>">
@@ -117,9 +117,9 @@ if (isset($_GET['acao'])) {
                             <p class="card-text">Preço: R$ <?= number_format($produto['preco'], 2, ',', '.') ?></p>
                             <p class="card-text">Quantidade: <?= $produto['quantidade'] ?></p>
                             <div>
-                                <a href="?acao=incrementar&id=<?= $id ?>" class="btn btn-sm btn-outline-success <?= ($produto['quantidade'] >= $estoque) ? 'disabled' : '' ?>">+</a>
-                                <a href="?acao=diminuir&id=<?= $id ?>" class="btn btn-sm btn-outline-warning">-</a>
-                                <a href="?acao=remover&id=<?= $id ?>" class="btn btn-sm btn-outline-danger">Remover</a>
+                                <a href="?acao=incrementar&id=<?= $id ?>#produto<?= $id ?>" class="btn btn-sm btn-outline-success <?= ($produto['quantidade'] >= $estoque) ? 'disabled' : '' ?>">+</a>
+                                <a href="?acao=diminuir&id=<?= $id ?>#produto<?= $id ?>" class="btn btn-sm btn-outline-warning">-</a>
+                                <a href="?acao=remover&id=<?= $id ?>#produto<?= $id ?>" class="btn btn-sm btn-outline-danger">Remover</a>
                             </div>
                             <?php if ($produto['quantidade'] >= $estoque): ?>
                                 <small class="text-danger">Estoque máximo atingido</small>

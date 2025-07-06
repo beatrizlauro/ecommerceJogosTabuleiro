@@ -47,10 +47,10 @@ include "topo.php";
 ?>
 
 <div class="container">
-    <h3>Detalhes do Pedido #<?= $pedido["id"] ?></h3>
-    <p><strong>Usuário:</strong> <?= $pedido["usuario"] ?></p>
-    <p><strong>Data:</strong> <?= $pedido["data_pedido"] ?></p>
-    <p><strong>Status:</strong>
+    <h3 style="color: white;">Detalhes do Pedido #<?= $pedido["id"] ?></h3>
+    <p style="color: white;"><strong>Usuário:</strong> <?= $pedido["usuario"] ?></p>
+    <p style="color: white;"><strong>Data:</strong> <?= $pedido["data_pedido"] ?></p>
+    <p style="color: white;"><strong>Status:</strong>
         <span class="badge 
             <?php
                 switch ($pedido["status"]) {

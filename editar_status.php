@@ -40,9 +40,9 @@ include "topo.php";
 ?>
 
 <div class="container">
-    <h3>Editar Status do Pedido #<?= $pedido["id"] ?></h3>
-    <p><strong>Usuário:</strong> <?= $pedido["usuario"] ?></p>
-    <p><strong>Data:</strong> <?= $pedido["data_pedido"] ?></p>
+    <h3 style="color: white;">Editar Status do Pedido #<?= $pedido["id"] ?></h3>
+    <p style="color: white;"><strong>Usuário:</strong> <?= $pedido["usuario"] ?></p>
+    <p style="color: white;"><strong>Data:</strong> <?= $pedido["data_pedido"] ?></p>
 
     <?php if ($mensagem): ?>
         <div class="alert alert-success"><?= $mensagem ?></div>
