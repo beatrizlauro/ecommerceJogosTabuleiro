@@ -288,3 +288,38 @@ form select {
 .modal-description {
   margin-top: 15px;
 }
+
+/* 1) Sobrescreve o bg-light */
+body.bg-light {
+  background-color: var(--cor-fundo) !important;
+}
+
+/* 2) Campos do formulário escuros */
+.form-control {
+  background-color: #1f2542 !important;
+  color: #fff !important;
+  border: 1px solid #1e236a !important;
+}
+.form-control:focus {
+  background-color: #1f2542 !important;
+  color: #fff !important;
+  box-shadow: none;
+  border-color: var(--cor-primaria) !important;
+}
+
+/* 3) Texto do rodapé em branco */
+small.text-muted {
+  color: #fff !important;
+}
+
+footer {
+  background-color: var(--cor-fundo); /* ou qualquer outra cor */
+  text-align: center;
+  padding: 20px 0;
+}
+
+footer p {
+  color: #fff;
+  margin: 0;
+  font-size: 0.9rem;
+}

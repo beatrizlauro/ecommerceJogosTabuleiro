@@ -25,15 +25,19 @@ include "conecta.php";
 $con = abreConexao();
 
 // 4. Recebe os dados do formulário
-$cep = $_POST['cep'] ?? '';
-$rua = $_POST['rua'] ?? '';
-$numero = $_POST['numero'] ?? '';
-$cidade = $_POST['cidade'] ?? '';
-$estado = $_POST['estado'] ?? '';
-$pagamento = $_POST['pagamento'] ?? '';
-$data_pedido = date('Y-m-d H:i:s');
+$cep      = $_POST['cep']      ?? '';
+$rua      = $_POST['rua']      ?? '';
+$numero   = $_POST['numero']   ?? '';
+$cidade   = $_POST['cidade']   ?? '';
+$estado   = $_POST['estado']   ?? '';
+$pagamento= $_POST['pagamento']?? '';
+
+// Aqui pegamos a data/hora enviada pelo cliente, ou usamos o servidor como fallback
+$data_pedido = $_POST['data_pedido_cliente'] 
+             ?? date('Y-m-d H:i:s');
+
 $usuario_id = $_SESSION["idusuario"];
-$status = "pendente"; // status padrão
+$status     = "pendente"; // status padrão
 
 // 5. Validação básica
 if (!$cep || !$rua || !$numero || !$cidade || !$estado || !$pagamento) {
@@ -47,35 +51,77 @@ foreach ($_SESSION['carrinho'] as $item) {
     $total += $item['preco'] * $item['quantidade'];
 }
 
-// 7. Inserir pedido
-$sql_pedido = "INSERT INTO pedidos (usuario_id, data_pedido, total, forma_pagamento, cep, rua, numero, cidade, estado, status) 
-               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+// 7. Inserir pedido principal
+$sql_pedido = "
+    INSERT INTO pedidos (
+        usuario_id,
+        data_pedido,
+        total,
+        forma_pagamento,
+        cep,
+        rua,
+        numero,
+        cidade,
+        estado,
+        status
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+";
 $stmt = $con->prepare($sql_pedido);
-$stmt->bind_param("isdsssssss", $usuario_id, $data_pedido, $total, $pagamento, $cep, $rua, $numero, $cidade, $estado, $status);
+$stmt->bind_param(
+    "isdsssssss",
+    $usuario_id,
+    $data_pedido,
+    $total,
+    $pagamento,
+    $cep,
+    $rua,
+    $numero,
+    $cidade,
+    $estado,
+    $status
+);
 $stmt->execute();
 $pedido_id = $stmt->insert_id;
 $stmt->close();
 
-// 8. Inserir os itens do pedido
-$sql_item = "INSERT INTO itens_pedido (id_pedido, id_produto, nome_produto, preco, quantidade) 
-             VALUES (?, ?, ?, ?, ?)";
-$stmt = $con->prepare($sql_item);
+// 8. Inserir os itens do pedido e atualizar estoque
+$sql_item = "
+    INSERT INTO itens_pedido (
+        id_pedido,
+        id_produto,
+        nome_produto,
+        preco,
+        quantidade
+    ) VALUES (?, ?, ?, ?, ?)
+";
+$stmtItem = $con->prepare($sql_item);
 
 foreach ($_SESSION['carrinho'] as $id_produto => $item) {
-    $nome = $item['nome'];
-    $preco = $item['preco'];
+    $nome       = $item['nome'];
+    $preco      = $item['preco'];
     $quantidade = $item['quantidade'];
-    $stmt->bind_param("iisdi", $pedido_id, $id_produto, $nome, $preco, $quantidade);
-    $stmt->execute();
 
-    // Atualiza o estoque (diminui a quantidade comprada)
-    $sql_estoque = "UPDATE produtos SET estoque = estoque - ? WHERE id = ? AND estoque >= ?";
-    $stmt_estoque = $con->prepare($sql_estoque);
-    $stmt_estoque->bind_param("iii", $quantidade, $id_produto, $quantidade);
-    $stmt_estoque->execute();
-    $stmt_estoque->close();
+    $stmtItem->bind_param("iisdi",
+        $pedido_id,
+        $id_produto,
+        $nome,
+        $preco,
+        $quantidade
+    );
+    $stmtItem->execute();
+
+    // Diminui estoque
+    $stmtEst = $con->prepare("
+        UPDATE produtos
+        SET estoque = estoque - ?
+        WHERE id = ? AND estoque >= ?
+    ");
+    $stmtEst->bind_param("iii", $quantidade, $id_produto, $quantidade);
+    $stmtEst->execute();
+    $stmtEst->close();
 }
-$stmt->close();
+
+$stmtItem->close();
 
 // 9. Limpa o carrinho
 unset($_SESSION['carrinho']);
@@ -92,8 +138,15 @@ unset($_SESSION['carrinho']);
     <div class="container mt-5 text-center">
         <div class="alert alert-success">
             <h4 class="alert-heading">✅ Compra realizada com sucesso!</h4>
-            <p>Seu pedido foi registrado com ID <strong><?= $pedido_id ?></strong> e está com status <strong><?= $status ?></strong>.</p>
-            <p>Total: <strong>R$ <?= number_format($total, 2, ',', '.') ?></strong></p>
+            <p>
+              Seu pedido foi registrado com ID 
+              <strong><?= $pedido_id ?></strong> 
+              em <strong><?= $data_pedido ?></strong> 
+              e está com status <strong><?= $status ?></strong>.
+            </p>
+            <p>
+              Total: <strong>R$ <?= number_format($total, 2, ',', '.') ?></strong>
+            </p>
             <hr>
             <a href="index.php" class="btn btn-primary mt-3">Voltar para a loja</a>
         </div>

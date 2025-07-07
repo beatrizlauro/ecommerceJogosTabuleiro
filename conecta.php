@@ -32,23 +32,23 @@
         global $conn;
         $senhaHash = password_hash($senha, PASSWORD_DEFAULT); // segurança
         $sql = "INSERT INTO usuarios (nome, email, senha) VALUES (?, ?, ?)";
-        $stmt = $con->prepare($sql);
+        $stmt = $conn->prepare($sql);
         $stmt->bind_param("sss", $nome, $email, $senhaHash);
         $stmt->execute();
         $stmt->close();
-        $con->close();
+        $conn->close();
     }
 
     function loginUsuario($email, $senha) {
         global $conn;
         $sql = "SELECT * FROM usuarios WHERE email = ?";
-        $stmt = $con->prepare($sql);
+        $stmt = $conn->prepare($sql);
         $stmt->bind_param("s", $email);
         $stmt->execute();
         $resultado = $stmt->get_result();
         $usuario = $resultado->fetch_assoc();
         $stmt->close();
-        $con->close();
+        $conn->close();
 
         if ($usuario && password_verify($senha, $usuario['senha'])) {
             return $usuario; // login bem-sucedido
@@ -63,27 +63,27 @@
         if ($senha) {
             $senhaHash = password_hash($senha, PASSWORD_DEFAULT);
             $sql = "UPDATE usuarios SET nome = ?, email = ?, senha = ? WHERE id = ?";
-            $stmt = $con->prepare($sql);
+            $stmt = $conn->prepare($sql);
             $stmt->bind_param("sssi", $nome, $email, $senhaHash, $id);
         } else {
             $sql = "UPDATE usuarios SET nome = ?, email = ? WHERE id = ?";
-            $stmt = $con->prepare($sql);
+            $stmt = $conn->prepare($sql);
             $stmt->bind_param("ssi", $nome, $email, $id);
         }
 
         $stmt->execute();
         $stmt->close();
-        $con->close();
+        $conn->close();
     }
 
     function excluirUsuario($id) {
         global $conn;
         $sql = "DELETE FROM usuarios WHERE id = ?";
-        $stmt = $con->prepare($sql);
+        $stmt = $conn->prepare($sql);
         $stmt->bind_param("i", $id);
         $stmt->execute();
         $stmt->close();
-        $con->close();
+        $conn->close();
     }
 
     function listarUsuarios() {
@@ -149,7 +149,7 @@
 
         if ($imagem !== null) {
             $sql = "UPDATE produtos SET nome = ?, descricao = ?, preco = ?, estoque = ?, imagem = ? WHERE id = ?";
-            $stmt = $con->prepare($sql);
+            $stmt = $conn->prepare($sql);
 
             // Primeiro faz o bind com um marcador nulo temporário para a imagem
             $stmt->bind_param("ssdibi", $nome, $descricao, $preco, $estoque, $null, $id);
@@ -159,7 +159,7 @@
 
         } else {
             $sql = "UPDATE produtos SET nome = ?, descricao = ?, preco = ?, estoque = ? WHERE id = ?";
-            $stmt = $con->prepare($sql);
+            $stmt = $conn->prepare($sql);
             $stmt->bind_param("ssdii", $nome, $descricao, $preco, $estoque, $id);
         }
 

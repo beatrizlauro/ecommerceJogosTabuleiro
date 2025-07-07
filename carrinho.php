@@ -101,8 +101,6 @@ if (isset($_GET['acao'])) {
         foreach ($_SESSION['carrinho'] as $id => $produto):
             $subtotal = $produto['preco'] * $produto['quantidade'];
             $total += $subtotal;
-
-            // Busca estoque atual para controle do botão
             $produtoBD = buscarProdutoPorId($id);
             $estoque = intval($produtoBD['estoque']);
         ?>
@@ -171,6 +169,8 @@ if (isset($_GET['acao'])) {
                 <option value="boleto">Boleto Bancário</option>
             </select>
 
+            <!-- campo oculto para data/hora do cliente -->
+            <input type="hidden" id="data_pedido_cliente" name="data_pedido_cliente" value="">
             <input type="hidden" name="confirmar" value="1">
 
             <div class="mt-4 d-flex justify-content-between">
@@ -178,6 +178,17 @@ if (isset($_GET['acao'])) {
                 <button type="submit" class="btn btn-primary">Finalizar Compra</button>
             </div>
         </form>
+
+        <script>
+          // Preenche o campo com o datetime local formatado YYYY-MM-DD HH:MM:SS
+          (function(){
+            const now = new Date();
+            const pad = n => n.toString().padStart(2,'0');
+            const dt = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())} `
+                     + `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+            document.getElementById('data_pedido_cliente').value = dt;
+          })();
+        </script>
     <?php endif; ?>
 </div>
 

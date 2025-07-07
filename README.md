@@ -1,109 +1,121 @@
-# D20 Emporium - E-commerce de Jogos de Tabuleiro
+# 🧙‍♂️ D20 Emporium — E-commerce de Jogos de Tabuleiro
 
-## Visão Geral
-Projeto desenvolvido como parte da disciplina de Programação II. O sistema é um e-commerce básico focado na venda de jogos de tabuleiro. O objetivo é aplicar os conceitos de desenvolvimento web com PHP e MySQL.
-
-## Funcionalidades Implementadas
-✔️ Cadastro e login de usuários com senha protegida por hash  
-✔️ CRUD completo de usuários (cadastrar, listar, editar, excluir)  
-✔️ CRUD completo de produtos (cadastrar, listar, editar, excluir)  
-✔️ Validação de entrada de dados  
-✔️ Sessões para controle de acesso  
-✔️ Design com Bootstrap  
-
-## Tecnologias Utilizadas
-- PHP (versão 7+)
-- MySQL / MariaDB
-- HTML5 / CSS3
-- Bootstrap 4
-- XAMPP (ambiente local)
-
-## Estrutura do Projeto
-```
-/d20Emporium/
-├── conecta.php
-├── login.php
-├── logout.php
-├── verificalogin.php
-├── index.php
-├── formusuario.php
-├── salvar_usuario.php
-├── lista_usuarios.php
-├── formProduto.php
-├── salvar_produto.php
-├── lista_produtos.php
-├── errosessao.php
-├── errologin.php
-├── estruturaBD.txt
-├── excluir_produto.php
-├── excluir_usuario.php
-├── rodape.php
-├── topo.php
-├── README.md
-├── css/
-└── js/
-```
-
-## ⚙️ Como Executar Localmente
-
-### 1. Instale um servidor local:
-- [XAMPP](https://www.apachefriends.org/index.html)
-
-### 2. Clone ou baixe este repositório:
-```bash
-git clone https://github.com/beatrizlauro/ecommerceJogosTabuleiro.git
-```
-
-### 3. Coloque os arquivos na pasta:
-```
-htdocs/d20-emporium
-```
-
-### 4. Inicie Apache e MySQL no painel do XAMPP/Wamp
+Este projeto é um sistema web completo para a venda de jogos de tabuleiro, desenvolvido em PHP e MySQL. O sistema permite o cadastro de produtos, gerenciamento de usuários, controle de pedidos e operação de um carrinho de compras com interface amigável.
 
 ---
 
-## 🛠️ Criando o Banco de Dados no phpMyAdmin
+## 🚀 Funcionalidades
 
-### Acesse:
-```
-http://localhost/phpmyadmin
-```
+### 👤 Usuários
+- Cadastro de novos usuários  
+- Login e autenticação de sessão  
+- Acesso restrito para administradores  
+- Listagem, edição e exclusão de usuários (admin)  
 
-### Execute o seguinte SQL para criar o banco e as tabelas:
+### 🛒 Produtos
+- Cadastro de produtos com imagem principal e imagens adicionais  
+- Listagem de produtos com foto, descrição e estoque  
+- Edição e exclusão de produtos (admin)  
+- Verificação de estoque na hora da compra  
 
-```sql
-CREATE DATABASE d20_emporium;
-USE d20_emporium;
+### 🧺 Carrinho de Compras
+- Adição de produtos ao carrinho  
+- Atualização de quantidades com verificação de estoque  
+- Remoção de produtos  
+- Cálculo automático de subtotal e total  
 
-CREATE TABLE usuarios (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nome VARCHAR(100) NOT NULL,
-    email VARCHAR(100) NOT NULL UNIQUE,
-    senha VARCHAR(255) NOT NULL
-);
+### 💳 Finalização de Compra
+- Formulário com endereço de entrega e forma de pagamento (PIX, cartão, boleto)  
+- Registro do pedido e dos itens  
+- Atualização automática do estoque  
 
-CREATE TABLE produtos (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nome VARCHAR(100) NOT NULL,
-    descricao TEXT NOT NULL,
-    preco DECIMAL(10,2) NOT NULL,
-    estoque INT NOT NULL,
-    imagem LONGBLOB
-);
-```
+### 📦 Gerenciamento de Pedidos (Admin)
+- Listagem de todos os pedidos  
+- Visualização dos detalhes do pedido  
+- Alteração do status do pedido (pendente, enviado, etc.)  
+- Proteção contra exclusão de produtos/usuários envolvidos em pedidos  
 
-## Acesso ao Sistema
-1. Acesse `http://localhost/d20Emporium/login.php`
-2. Faça login com um usuário cadastrado
-3. Navegue pelo sistema (painel de administração, cadastro de usuários e produtos)
+---
 
-## Desenvolvido por
-- Ana Flávia Alves Rosa
+## 🛠️ Tecnologias Utilizadas
+
+- **PHP 8+**  
+- **MySQL**  
+- **HTML5 / CSS3 / Bootstrap 5**  
+- **JavaScript**  
+- Sessões e Prepared Statements para segurança  
+- Armazenamento de imagens em BLOB  
+
+---
+
+## ⚙️ Requisitos
+
+- Servidor local com Apache e MySQL (XAMPP, WAMP ou similar)  
+- PHP 7.4+  
+- MySQL 5.7+  
+
+---
+
+## 🔧 Instalação
+
+1. Clone este repositório:
+    ```bash
+    git clone https://github.com/beatrizlauro/ecommerceJogosTabuleiro.git
+    ```
+
+2. Importe o banco de dados:
+    - Abra o **phpMyAdmin**  
+    - Crie o banco `d20_emporium`  
+    - Importe o arquivo `d20_emporium.sql`  
+
+3. Inicie o servidor local e acesse:
+    ```
+    http://localhost/ecommerceJogosTabuleiro/index.php
+    ```
+
+---
+
+## 🔐 Acesso Administrativo
+
+- Para acessar funcionalidades de administração, é necessário um usuário com `is_admin = 1` no banco.
+
+---
+
+## 📌 Uso
+
+### 👤 Usuário Comum
+1. **Cadastro**: Acesse a página de login e clique em "Criar Conta".  
+2. **Login**: Entre com seu usuário e senha.  
+3. **Explorar Produtos**: Navegue pela loja, visualize os jogos disponíveis.  
+4. **Carrinho**:
+   - Clique em "Adicionar ao carrinho" para incluir um produto.  
+   - Altere a quantidade ou remova diretamente do carrinho.  
+5. **Finalizar Compra**:
+   - Informe endereço de entrega e forma de pagamento.  
+   - O pedido será registrado com status **"pendente"**.  
+
+### 🛠️ Administrador
+1. **Login com usuário admin** (campo `is_admin = 1` no banco).  
+2. **Gerenciar Produtos**:
+   - Cadastrar, listar, editar ou excluir produtos.
+3. **Gerenciar Usuários**:
+   - Cadastrar, listar, editar ou excluir contas de usuários.
+4. **Gerenciar Pedidos**:
+   - Visualize pedidos realizados por clientes.  
+   - Altere o status dos pedidos (ex: de "pendente" para "enviado").  
+
+> ⚠️ **Atenção**: Produtos e usuários que já foram utilizados em vendas **não podem ser excluídos**, protegendo a integridade do banco de dados.
+
+---
+
+## 👥 Créditos
+
+Projeto desenvolvido por:
+
+- Ana Flávia Alves Rosa  
 - Beatriz da Costa Lauro  
 - Brenda Bonaita de Oliveira  
 
-Universidade do Estado de Minas Gerais – Sistemas de Informação, 5º período - Programação II  – 2025.
+Como parte da disciplina de **Programação II** – Curso de **Sistemas de Informação**, 5º período – 2025.
 
----
-**D20 Emporium**
+![Index do projeto](img/telaInicial.png)

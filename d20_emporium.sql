@@ -1,4 +1,3 @@
-CREATE DATABASE d20_emporium;
 USE d20_emporium;
 
 CREATE TABLE usuarios (

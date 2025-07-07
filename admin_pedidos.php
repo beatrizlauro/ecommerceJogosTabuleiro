@@ -1,18 +1,18 @@
 <?php
 session_start();
 if (!isset($_SESSION["idusuario"]) || $_SESSION["is_admin"] != 1) {
-    header("Location: errosessao.php"); // ou login.php
+    header("Location: errosessao.php");
     exit();
 }
 
 include "conecta.php";
 $con = abreConexao();
 
-// Consulta: pedidos + nomes de usuários
+// Consulta: pedidos + nomes de usuários, ordenados por ID (do maior para o menor)
 $sql = "SELECT p.id AS pedido_id, u.nome AS usuario, p.data_pedido, p.status 
         FROM pedidos p 
         JOIN usuarios u ON p.usuario_id = u.id 
-        ORDER BY p.data_pedido DESC";
+        ORDER BY p.id";
 
 $resultado = $con->query($sql);
 
